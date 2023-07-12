@@ -5,5 +5,9 @@ export const Container = styled.div`
     // do nosso Layout (ver Layout/styles.ts)
     grid-area: CT; 
 
-    background-color: #1b1f38;
+    // Definindo a cor da fonte usando valores implementados em src/styles 
+    color: ${props => props.theme.colors.white};
+
+    // Definindo a cor do background 
+    background-color: ${props => props.theme.colors.primary}; 
 `
