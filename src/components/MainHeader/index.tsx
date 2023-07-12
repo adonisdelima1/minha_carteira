@@ -10,6 +10,7 @@ import {
     Welcome, 
     UserName 
 } from './styles'; 
+import Toggle from '../Toggle';
 
 export default function MainHeader() {
     const emoji = useMemo(() => {
@@ -23,7 +24,7 @@ export default function MainHeader() {
     }, []);
     return(
         <Container>
-            <h1>Toggle</h1>
+            <Toggle />
 
             <Profile>
                 <Welcome>Olá, {emoji}</Welcome>
