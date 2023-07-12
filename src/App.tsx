@@ -1,4 +1,4 @@
-import Dashboard from './pages/Dashboard';
+import Layout from './components/Layout';
 import GlobalStyles from './styles/GlobalStyles'; 
 
 
@@ -6,7 +6,7 @@ export default function App() {
     return (
         <>
             <GlobalStyles />
-            <Dashboard />
+            <Layout />
         </>
     );
 }
