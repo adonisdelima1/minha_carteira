@@ -24,4 +24,30 @@ export const Container = styled.div`
     // colocar a nossa aplicação dentro desse ThemeProvider e nas props do 
     // ThemeProvider especificamos se será dark ou light 
     background-color: ${props => props.theme.colors.secondary}; 
+
+    // Alinha os elementos lado a lado 
+    display: flex; 
+
+    //   Com essa linha de justify colocammos cada elemento em uma extremidade 
+    // (horizontalmente falando)
+    justify-content: space-between; 
+
+    // Com essa linha de align organizamos a os elementos verticalmente 
+    align-items: center; 
+
+    // Configurando a borda que fará a fronteira visual entre header e content 
+    border-bottom: 1px solid ${props => props.theme.colors.gray}; 
+
+    padding: 0 35px;
 `
+
+// Implementação do elemento Profile 
+export const Profile = styled.div`
+    color: ${props => props.theme.colors.white}
+`;
+
+// Implementação do elemento Welcome 
+export const Welcome = styled.h3``; 
+
+// Implementação do elemento UserName 
+export const UserName = styled.span``;
