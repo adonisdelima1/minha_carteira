@@ -37,7 +37,7 @@ export const MenuContainer = styled.nav`
     display: flex;
 
     //   Por padrão, o display flex coloca os elementos lado a lado. Então, para 
-    // que nossas opções de menu fiquem uma embaixo da outra, usamos o 
+    // que nossas opções de menu sejam posicionadas uma embaixo da outra, usamos o 
     // flex-direction 'settado' para 'column'
     flex-direction: column;
 
