@@ -1,10 +1,37 @@
+import { useMemo } from "react";
 import CashFlowCard from "../../components/CashFlowCard";
 import ContentHeader from "../../components/ContentHeader";
 import SelectInput from "../../components/SelectInput";
 import { Container, Content, Filters } from "./styles";
-
+import { useParams } from "react-router-dom";
 
 export default function List() {
+
+    let { type } = useParams();
+
+    // Vai definir se o título da page será de entradas ou saídas 
+    const listPageHeader = useMemo(() => {
+        switch (type) {
+            case 'incomes': 
+                return ({ 
+                            title: 'Entradas', 
+                            lineColor: '#F7931B' 
+                        });
+
+            case 'outgoes': 
+                return ({ 
+                            title: 'Saídas', 
+                            lineColor: '#E44C4E' 
+                        });
+
+            default: 
+                return ( 
+                    { 
+                        title: 'CONTEÚDO NÃO ENCONTRADO', 
+                        lineColor: '#E44C4E' 
+                    });
+        }
+    }, [type]);
 
     const months = [
         {value: 7, label: 'Julho'},
@@ -20,7 +47,7 @@ export default function List() {
 
     return (
         <Container>
-            <ContentHeader title="List" lineColor="#F7931B">
+            <ContentHeader title={listPageHeader.title} lineColor={listPageHeader.lineColor}>
                 <SelectInput 
                     options={months} 
                     onChange={() => {}}
