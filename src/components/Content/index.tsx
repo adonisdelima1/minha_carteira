@@ -1,9 +1,9 @@
 import { Container } from './styles'; 
 
-export default function Content() {
+export default function Content(props: any) {
     return(
         <Container>
-            <h1>Content</h1>
+            {props.children}
         </Container>
     );
 }

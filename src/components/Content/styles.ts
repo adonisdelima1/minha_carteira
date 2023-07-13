@@ -10,4 +10,7 @@ export const Container = styled.div`
 
     // Definindo a cor do background 
     background-color: ${props => props.theme.colors.primary}; 
+
+    // Especificando apenas um valor em padding afetamos os 4 lados 
+    padding: 25px; 
 `

@@ -5,6 +5,7 @@ import dark from './styles/themes/dark';
 import light from './styles/themes/light';
 
 import GlobalStyles from './styles/GlobalStyles'; 
+import Dashboard from './pages/Dashboard';
 
 
 
@@ -12,7 +13,9 @@ export default function App() {
     return (
         <ThemeProvider theme={dark}>
             <GlobalStyles />
-            <Layout />
+            <Layout>
+                <Dashboard />
+            </Layout>
         </ThemeProvider>
     );
 }
