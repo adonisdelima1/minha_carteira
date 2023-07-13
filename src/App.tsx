@@ -6,6 +6,7 @@ import light from './styles/themes/light';
 
 import GlobalStyles from './styles/GlobalStyles'; 
 import Dashboard from './pages/Dashboard';
+import List from './pages/List';
 
 
 
@@ -14,7 +15,8 @@ export default function App() {
         <ThemeProvider theme={dark}>
             <GlobalStyles />
             <Layout>
-                <Dashboard />
+                {/* <Dashboard /> */}
+                <List />
             </Layout>
         </ThemeProvider>
     );
