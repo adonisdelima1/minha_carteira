@@ -1,12 +1,28 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CashFlowCard from "../../components/CashFlowCard";
 import ContentHeader from "../../components/ContentHeader";
 import SelectInput from "../../components/SelectInput";
 import { Container, Content, Filters } from "./styles";
 import { useParams } from "react-router-dom";
+import gains from '../../repositories/gains'; 
+import expenses from '../../repositories/expenses';
+
+interface IData {
+    id: string,
+    description: string,
+    formattedAmount: string,
+    frequency: string, 
+    formattedDate: string, 
+    tagColor: string
+}
 
 export default function List() {
 
+    // Raw data from repositories 
+    const [data, setData] = useState<IData[]>([]);
+    
+    
+    // Recebendo o tipo de lista que é informado na url ('incomes' ou 'outgoes') 
     let { type } = useParams();
 
     // Vai definir se o título da page será de entradas ou saídas 
@@ -31,7 +47,32 @@ export default function List() {
                         lineColor: '#E44C4E' 
                     });
         }
-    }, [type]);
+    }, [type]); 
+
+    const listData = useMemo(() => {
+        switch (type) {
+            case 'incomes': return gains;
+            case 'outgoes': return expenses;
+            default: return new Array();
+        }
+    }, [type])
+
+    useEffect(() => {
+        const response = listData.map((item, index) => {
+            return {
+                id: String(index),
+                description: item.description,
+                formattedAmount: item.amount,
+                frequency: item.frequency, 
+                formattedDate: item.date, 
+                tagColor: item.frequency === 'recorrente' ? 
+                '#4E41F0' : '#E44C4E',
+            }
+        });
+
+        setData(response);
+    },[])
+
 
     const months = [
         {value: 7, label: 'Julho'},
@@ -72,12 +113,21 @@ export default function List() {
             </Filters>
 
             <Content>
-                <CashFlowCard 
-                    title="Conta de Luz"
-                    subtitle="13/07/2023"
-                    tagColor="#E44C4E"
-                    amount="R$130,00"
-                />
+                {
+                    data.map(item => {
+
+                        return ( 
+                            <CashFlowCard 
+                                key={item.id}
+                                title={item.description}
+                                subtitle={item.formattedDate}
+                                tagColor={item.tagColor}
+                                amount={item.formattedAmount} 
+                            />
+                        )
+                    })
+
+                }
             </Content>
         </Container>
     );
