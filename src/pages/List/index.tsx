@@ -1,11 +1,25 @@
-import { useEffect, useMemo, useState } from "react";
+// React Hooks
+import { useEffect, useMemo, useState } from 'react';
+
+// React Router Dom
+import { useParams } from 'react-router-dom';
+
+// My Styles
+import { Container, Content, Filters } from "./styles";
+
+// My Components
 import CashFlowCard from "../../components/CashFlowCard";
 import ContentHeader from "../../components/ContentHeader";
 import SelectInput from "../../components/SelectInput";
-import { Container, Content, Filters } from "./styles";
-import { useParams } from "react-router-dom";
+
+// My utils
+import formatToBrazilianReal from '../../utils/currencyFormatter'; 
+import formatToBrazilianDateFormat from '../../utils/dateFormatter';
+
+// Data
 import gains from '../../repositories/gains'; 
 import expenses from '../../repositories/expenses';
+import {years, months} from '../../repositories/time';
 
 interface IData {
     id: string,
@@ -17,12 +31,10 @@ interface IData {
 }
 
 export default function List() {
-
     // Raw data from repositories 
-    const [data, setData] = useState<IData[]>([]);
+    const [data, setData] = useState<IData[]>([]); 
     
-    
-    // Recebendo o tipo de lista que é informado na url ('incomes' ou 'outgoes') 
+    // Obtendo o tipo de lista informado na url ('incomes' ou 'outgoes') 
     let { type } = useParams();
 
     // Vai definir se o título da page será de entradas ou saídas 
@@ -62,9 +74,9 @@ export default function List() {
             return {
                 id: String(index),
                 description: item.description,
-                formattedAmount: item.amount,
+                formattedAmount: formatToBrazilianReal(Number(item.amount)),
                 frequency: item.frequency, 
-                formattedDate: item.date, 
+                formattedDate: formatToBrazilianDateFormat(item.date), 
                 tagColor: item.frequency === 'recorrente' ? 
                 '#4E41F0' : '#E44C4E',
             }
