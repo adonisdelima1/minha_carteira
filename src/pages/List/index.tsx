@@ -33,6 +33,13 @@ interface IData {
 export default function List() {
     // Raw data from repositories 
     const [data, setData] = useState<IData[]>([]); 
+
+    // Estados dos filtros de mês e ano 
+    // Acrescentamos 1 ao mês obtido porque janeiro tem id = 0
+    const [selectedMonth, setSelectedMonth] = 
+        useState<string>(String(new Date().getMonth() + 1));
+    const [selectedYear, setSelectedYear] = 
+        useState<string>(String(new Date().getFullYear()));
     
     // Obtendo o tipo de lista informado na url ('incomes' ou 'outgoes') 
     let { type } = useParams();
@@ -61,6 +68,7 @@ export default function List() {
         }
     }, [type]); 
 
+    // Usando o type obtido via useParams para decidir quais dados obter
     const listData = useMemo(() => {
         switch (type) {
             case 'incomes': return gains;
@@ -69,10 +77,19 @@ export default function List() {
         }
     }, [type])
 
+
     useEffect(() => {
-        const response = listData.map((item, index) => {
+        const listToBeFiltered = listData;
+        
+        const itemsFiltereByMonthAndYear = listToBeFiltered.filter(item => { 
+            const date = new Date(item.date); 
+            return String(date.getMonth() + 1) === selectedMonth 
+                && String(date.getFullYear()) === selectedYear;
+        });
+        
+        const formattedData = itemsFiltereByMonthAndYear.map(item => {
             return {
-                id: String(index),
+                id: String(Math.random () * data.length),
                 description: item.description,
                 formattedAmount: formatToBrazilianReal(Number(item.amount)),
                 frequency: item.frequency, 
@@ -80,35 +97,25 @@ export default function List() {
                 tagColor: item.frequency === 'recorrente' ? 
                 '#4E41F0' : '#E44C4E',
             }
-        });
+        }) 
 
-        setData(response);
-    },[])
-
-
-    const months = [
-        {value: 7, label: 'Julho'},
-        {value: 8, label: 'Agosto'},
-        {value: 9, label: 'Setembro'}
-    ]
+        setData(formattedData);
     
-    const years = [
-        {value: 2020, label: 2020},
-        {value: 2019, label: 2019},
-        {value: 2018, label: 2018}
-    ]
+    }, [listData, selectedMonth, selectedYear]);
 
     return (
         <Container>
             <ContentHeader title={listPageHeader.title} lineColor={listPageHeader.lineColor}>
-                <SelectInput 
-                    options={months} 
-                    onChange={() => {}}
-                />
-                <SelectInput 
-                    options={years} 
-                    onChange={() => {}}
-                />
+            <SelectInput 
+                options={months} 
+                defaultValue={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+            />
+            <SelectInput 
+                options={years} 
+                defaultValue={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+            />
             </ContentHeader>
 
             <Filters>
@@ -127,7 +134,6 @@ export default function List() {
             <Content>
                 {
                     data.map(item => {
-
                         return ( 
                             <CashFlowCard 
                                 key={item.id}
