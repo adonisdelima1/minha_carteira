@@ -1,6 +1,9 @@
 // React Hooks
 import { useEffect, useMemo, useState } from 'react';
 
+// React utils
+import uuid from 'react-uuid';
+
 // React Router Dom
 import { useParams } from 'react-router-dom';
 
@@ -8,9 +11,9 @@ import { useParams } from 'react-router-dom';
 import { Container, Content, Filters } from "./styles";
 
 // My Components
-import CashFlowCard from "../../components/CashFlowCard";
 import ContentHeader from "../../components/ContentHeader";
 import SelectInput from "../../components/SelectInput";
+import CashFlowCard from "../../components/CashFlowCard";
 
 // My utils
 import formatToBrazilianReal from '../../utils/currencyFormatter'; 
@@ -37,55 +40,51 @@ export default function List() {
     // Estados dos filtros de mês e ano 
     // Acrescentamos 1 ao mês obtido porque janeiro tem id = 0
     const [selectedMonth, setSelectedMonth] = 
-        useState<string>(String(new Date().getMonth() + 1));
+        useState<number>(new Date().getMonth() + 1);
     const [selectedYear, setSelectedYear] = 
-        useState<string>(String(new Date().getFullYear()));
+        useState<number>(new Date().getFullYear());
     
-    const [selectedFrequency, setSelectedFrequency] = 
+    const [frequencyFilterSelected, setFrequencyFilterSelected] = 
         useState<string[]>(['recorrente', 'eventual']);
 
     // Obtendo o tipo de lista informado na url ('incomes' ou 'outgoes') 
-    let { type } = useParams();
+    let { type: balanceType } = useParams();
 
-    // Vai definir se o título da page será de entradas ou saídas 
-    const listPageHeader = useMemo(() => {
-        switch (type) {
+    //   Vai definir se o título da page será de entradas ou saídas e também 
+    // quais dados obter, se de entradas ou saídas  
+    const listPageHeaderAndContent = useMemo(() => {
+        switch (balanceType) {
             case 'incomes': 
                 return ({ 
                             title: 'Entradas', 
-                            lineColor: '#F7931B' 
+                            lineColor: '#F7931B',
+                            listData: gains 
                         });
 
             case 'outgoes': 
                 return ({ 
                             title: 'Saídas', 
-                            lineColor: '#E44C4E' 
+                            lineColor: '#E44C4E',
+                            listData: expenses 
                         });
 
             default: 
                 return ( 
                     { 
                         title: 'CONTEÚDO NÃO ENCONTRADO', 
-                        lineColor: '#E44C4E' 
+                        lineColor: '#E44C4E',
+                        listData: new Array() 
                     });
         }
-    }, [type]); 
+    }, [balanceType]); 
 
-    // Usando o type obtido via useParams para decidir quais dados obter
-    const listData = useMemo(() => {
-        switch (type) {
-            case 'incomes': return gains;
-            case 'outgoes': return expenses;
-            default: return new Array();
-        }
-    }, [type]) 
 
     //   Essa implementação de years nos permite adicionar às opções de filtro 
     // apenas os anos dos registros obtidos do arquivo hardcoded na pasta  
     const years = useMemo(() => {
         let uniqueYears: number[] = [];
 
-        listData.forEach(item => {
+        listPageHeaderAndContent.listData.forEach(item => {
             const date = new Date(item.date);
             const year = date.getFullYear();
 
@@ -102,7 +101,7 @@ export default function List() {
             };
         });
 
-    }, [listData]);
+    }, [listPageHeaderAndContent.listData]);
 
 
     const months = useMemo(() => {
@@ -120,30 +119,56 @@ export default function List() {
 
     const handleFrequencyClick = (frequency: string) => {
         const alreadySelected = 
-            selectedFrequency.findIndex(item => item === frequency);
+            frequencyFilterSelected.findIndex(item => item === frequency);
 
         if (alreadySelected >= 0) {
             const filtered = 
-                selectedFrequency.filter(item => item !== frequency)
-            setSelectedFrequency(filtered);
+                frequencyFilterSelected.filter(item => item !== frequency)
+            setFrequencyFilterSelected(filtered);
         } else {
-            setSelectedFrequency(prev => [...prev, frequency]);
+            setFrequencyFilterSelected(prev => [...prev, frequency]);
         }
     }
 
+    //   As funções 'handleSelectedYear' e 'handleSelectedMonth' foram 
+    // sugeridas pelo instrutor do curso porque a obtenção do value de um 
+    // elemento selecionado resulta em uma string, mas essas funções se tornam 
+    // desnecessárias quando convertemos o value para number lá mesmo na 
+    // implementação do atributo onClick(). A intenção foi mantê-las apenas 
+    // para preservar exemplos de uso do try-catch 
+    // const handleSelectedYear = (year: string) => {
+    //     try {
+    //         const parsedYear = Number(year);
+    //         setSelectedYear(parsedYear);
+    //     } 
+    //     catch(error) {
+    //         throw new Error('Invalid value for year selected.');
+    //     }
+    // }
+    
+    // const handleSelectedMonth = (month: string) => {
+    //     try {
+    //         const parsedMonth = Number(month);
+    //         setSelectedMonth(parsedMonth);
+    //     } 
+    //     catch(error) {
+    //         throw new Error('Invalid value for month selected.');
+    //     }
+    // }
+
     useEffect(() => {
-        const listToBeFiltered = listData;
+        const listToBeFiltered = new Array(...listPageHeaderAndContent.listData);
         
         const itemsFiltereByMonthAndYear = listToBeFiltered.filter(item => { 
             const date = new Date(item.date); 
-            return String(date.getMonth() + 1) === selectedMonth 
-                && String(date.getFullYear()) === selectedYear
-                && selectedFrequency.includes(item.frequency);
+            return date.getMonth() + 1 === selectedMonth 
+                && date.getFullYear() === selectedYear
+                && frequencyFilterSelected.includes(item.frequency);
         });
         
         const formattedData = itemsFiltereByMonthAndYear.map(item => {
             return {
-                id: String(Math.random () * data.length),
+                id: uuid(),
                 description: item.description,
                 formattedAmount: formatToBrazilianReal(Number(item.amount)),
                 frequency: item.frequency, 
@@ -155,20 +180,23 @@ export default function List() {
 
         setData(formattedData);
     
-    }, [listData, selectedMonth, selectedYear, selectedFrequency]);
+    }, [listPageHeaderAndContent.listData, selectedMonth, selectedYear, frequencyFilterSelected]);
 
     return (
         <Container>
-            <ContentHeader title={listPageHeader.title} lineColor={listPageHeader.lineColor}>
+            <ContentHeader 
+                title={listPageHeaderAndContent.title} 
+                lineColor={listPageHeaderAndContent.lineColor}
+            >
             <SelectInput 
                 options={months} 
                 defaultValue={selectedMonth}
-                onChange={(e) => setSelectedMonth(e.target.value)}
+                onChange={(e) => setSelectedMonth(Number(e.target.value))}
             />
             <SelectInput 
                 options={years} 
                 defaultValue={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
+                onChange={(e) => setSelectedYear(Number(e.target.value))}
             />
             </ContentHeader>
 
@@ -176,29 +204,23 @@ export default function List() {
                 <button 
                     type="button" 
                     className={
-                        `tag-filter tag-filter-recurrent 
-                         ${
-                            selectedFrequency.includes('recorrente') 
+                        `tag-filter tag-filter-recurrent ${
+                            frequencyFilterSelected.includes('recorrente') 
                             && 'tag-active'
                         }`
                     }
                     onClick={() => handleFrequencyClick('recorrente')}
-                >
-                        Recorrentes
-                </button>
+                >Recorrentes</button>
                 <button 
                     type="button" 
                     className={
-                        `tag-filter tag-filter-eventual 
-                        ${
-                            selectedFrequency.includes('eventual') 
+                        `tag-filter tag-filter-eventual ${
+                            frequencyFilterSelected.includes('eventual') 
                             && 'tag-active'
                         }`
                     }
                     onClick={() => handleFrequencyClick('eventual')}
-                >
-                        Eventuais
-                </button>
+                >Eventuais</button>
             </Filters>
 
             <Content>

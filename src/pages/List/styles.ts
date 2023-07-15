@@ -4,7 +4,7 @@ export const Container = styled.div`
     
 `;
 
-export const Content = styled.div`
+export const Content = styled.main`
     
 `;
 
@@ -25,15 +25,13 @@ export const Filters = styled.div`
 
         // 0 (zero) em cima e embaixo e 10px nos lados
         margin: 0 10px; 
-
         margin-bottom: 30px;
 
-        transition: opacity .3s; 
-
+        
         //   Definindo que seja naturalmente meio apagado e então, apenas quando 
         // estiver selecionado, a opacidade passará a ser 100% 
         opacity: .4;
-
+        transition: opacity .3s; 
         &:hover {
             opacity: .7;
         } 
