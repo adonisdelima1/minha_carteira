@@ -19,7 +19,7 @@ import formatToBrazilianDateFormat from '../../utils/dateFormatter';
 // Data
 import gains from '../../repositories/gains'; 
 import expenses from '../../repositories/expenses';
-import {years, months} from '../../repositories/time';
+import listOfMonths from '../../repositories/months';
 
 interface IData {
     id: string,
@@ -75,7 +75,41 @@ export default function List() {
             case 'outgoes': return expenses;
             default: return new Array();
         }
-    }, [type])
+    }, [type]) 
+
+    //   Essa implementação de years nos permite adicionar às opções de filtro 
+    // apenas os anos dos registros obtidos do arquivo hardcoded na pasta  
+    const years = useMemo(() => {
+        let uniqueYears: number[] = [];
+
+        listData.forEach(item => {
+            const date = new Date(item.date);
+            const year = date.getFullYear();
+
+            // Esse check está aqui para evitar valores duplicados na dropdown
+            if(!uniqueYears.includes(year)){
+                uniqueYears.push(year)
+            }
+        });
+
+        return uniqueYears.map(year => {
+            return {
+                value: year,
+                label: year
+            };
+        });
+
+    }, [listData]);
+
+
+    const months = useMemo(() => {
+        return listOfMonths.map((month, index) => {
+            return {
+                value: index+1,
+                label: month
+            };
+        });
+    }, []); 
 
 
     useEffect(() => {
