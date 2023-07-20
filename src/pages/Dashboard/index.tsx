@@ -14,32 +14,115 @@
 //     );
 // } 
 
-
 // export default Dashboard; 
 
+
+// React Hooks
+import { useMemo, useState } from "react";
+
+// My components 
 import ContentHeader from "../../components/ContentHeader";
 import SelectInput from "../../components/SelectInput";
+
+// Dashboard's style 
 import { Container } from "./styles" 
 
+// Data
+import gains from '../../repositories/gains'; 
+import expenses from '../../repositories/expenses';
+import listOfMonths from '../../repositories/months';
+
 export default function Dashboard() {
+
+    // Estados dos filtros de mês e ano 
+    // Acrescentamos 1 ao mês obtido porque janeiro tem id = 0
+    const [selectedMonth, setSelectedMonth] = 
+        useState<number>(new Date().getMonth() + 1);
+    const [selectedYear, setSelectedYear] = 
+        useState<number>(new Date().getFullYear());
+
+        
     
+    //   Essa implementação de years nos permite adicionar às opções de filtro 
+    // apenas os anos dos registros obtidos do arquivo hardcoded na pasta  
+    const years = useMemo(() => {
+        let uniqueYears: number[] = [];
+
+        //   Agora, no dashboard, precisamos obter tanto o balanço de entradas 
+        // (incomes) quanto de saídas (outgoes)
+        [...expenses, ...gains].forEach(item => {
+            const date = new Date(item.date);
+            const year = date.getFullYear();
+
+            // Esse check está aqui para evitar valores duplicados na dropdown
+            if(!uniqueYears.includes(year)){
+                uniqueYears.push(year)
+            }
+        });
+
+        return uniqueYears.map(year => {
+            return {
+                value: year,
+                label: year
+            };
+        });
+
+    }, []);
 
 
-    const options = [
-        {value: "Adonis",label: "Adonis"},
-        {value: "Nayara",label: "Nayara"},
-        {value: "Brisa", label: "Brisa"},
-    ]
+    const months = useMemo(() => {
+        return listOfMonths.map((month, index) => {
+            return {
+                value: index+1,
+                label: month
+            };
+        });
+    }, []); 
+
+
+
+    //   As funções 'handleSelectedYear' e 'handleSelectedMonth' foram 
+    // sugeridas pelo instrutor do curso porque a obtenção do value de um 
+    // elemento selecionado (através do 'get' usando 'e.target.value') resulta 
+    // em uma string, mas essas funções se tornam desnecessárias quando 
+    // convertemos o value para number lá mesmo na implementação do atributo 
+    // onClick(). A intenção foi mantê-las apenas para preservar exemplos de 
+    // uso do try-catch. 
+    
+    // const handleSelectedYear = (year: string) => {
+    //     try {
+    //         const parsedYear = Number(year);
+    //         setSelectedYear(parsedYear);
+    //     } 
+    //     catch(error) {
+    //         throw new Error('Invalid value for year selected.');
+    //     }
+    // }
+    
+    // const handleSelectedMonth = (month: string) => {
+    //     try {
+    //         const parsedMonth = Number(month);
+    //         setSelectedMonth(parsedMonth);
+    //     } 
+    //     catch(error) {
+    //         throw new Error('Invalid value for month selected.');
+    //     }
+    // }
+
+
     
     return (
         <Container>
-            <ContentHeader
-                title="Dashboard"
-                lineColor="#F7931B"
-            >
+            <ContentHeader title="Dashboard"lineColor="#F7931B">
                 <SelectInput 
-                    options={options}
-                    onChange={() => {}}
+                    options={months} 
+                    defaultValue={selectedMonth}
+                    onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                />
+                <SelectInput 
+                    options={years} 
+                    defaultValue={selectedYear}
+                    onChange={(e) => setSelectedYear(Number(e.target.value))}
                 />
             </ContentHeader>
         </Container>
