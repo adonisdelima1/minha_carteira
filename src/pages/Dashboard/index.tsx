@@ -22,10 +22,11 @@ import { useMemo, useState } from "react";
 
 // My components 
 import ContentHeader from "../../components/ContentHeader";
-import SelectInput from "../../components/SelectInput";
+import SelectInput from "../../components/SelectInput"; 
+import WalletBox from "../../components/WalletBox";
 
 // Dashboard's style 
-import { Container } from "./styles" 
+import { Container, Content } from "./styles" 
 
 // Data
 import gains from '../../repositories/gains'; 
@@ -125,6 +126,32 @@ export default function Dashboard() {
                     onChange={(e) => setSelectedYear(Number(e.target.value))}
                 />
             </ContentHeader>
+            <Content>
+                <WalletBox 
+                    title= 'Saldo'
+                    amount={150.00}
+                    footerLabel= 'Atualizado com base nas entradas e saídas'
+                    icon= 'dollar' 
+                    boxColor= '#4E41F0'
+                />
+                
+                <WalletBox 
+                    title= 'Entradas'
+                    amount={5000.00}
+                    footerLabel= 'Atualizado com base nas entradas e saídas'
+                    icon= 'arrowUp' 
+                    boxColor= '#F7931B'
+                />
+                
+                <WalletBox 
+                    title= 'Saídas'
+                    amount={4850.00}
+                    footerLabel= 'Atualizado com base nas entradas e saídas'
+                    icon= 'arrowDown' 
+                    boxColor= '#E44C4E'
+                />
+
+            </Content>
         </Container>
     )
 }
