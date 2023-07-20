@@ -80,11 +80,16 @@ export default function List() {
 
 
     //   Essa implementação de years nos permite adicionar às opções de filtro 
-    // apenas os anos dos registros obtidos do arquivo hardcoded na pasta  
+    // apenas os anos dos registros obtidos dos arquivos hardcoded na pasta  
     const years = useMemo(() => {
+        
         let uniqueYears: number[] = [];
 
-        listPageHeaderAndContent.listData.forEach(item => {
+        //   A linha abaixo foi comentada para evitar que, quando estejamos 
+        // mostrando conteúdo de saídas, a dropdown do ano não seja afetada por 
+        // datas encontradas na lista de entrada, por exemplo. 
+        // [...expenses, ...gains].forEach(item => {
+        [...listPageHeaderAndContent.listData].forEach(item => {
             const date = new Date(item.date);
             const year = date.getFullYear();
 
@@ -132,10 +137,12 @@ export default function List() {
 
     //   As funções 'handleSelectedYear' e 'handleSelectedMonth' foram 
     // sugeridas pelo instrutor do curso porque a obtenção do value de um 
-    // elemento selecionado resulta em uma string, mas essas funções se tornam 
-    // desnecessárias quando convertemos o value para number lá mesmo na 
-    // implementação do atributo onClick(). A intenção foi mantê-las apenas 
-    // para preservar exemplos de uso do try-catch 
+    // elemento selecionado (através do 'get' usando 'e.target.value') resulta 
+    // em uma string, mas essas funções se tornam desnecessárias quando 
+    // convertemos o value para number lá mesmo na implementação do atributo 
+    // onClick(). A intenção foi mantê-las apenas para preservar exemplos de 
+    // uso do try-catch. 
+
     // const handleSelectedYear = (year: string) => {
     //     try {
     //         const parsedYear = Number(year);
