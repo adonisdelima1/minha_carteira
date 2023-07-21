@@ -24,14 +24,20 @@ import { useMemo, useState } from "react";
 import ContentHeader from "../../components/ContentHeader";
 import SelectInput from "../../components/SelectInput"; 
 import WalletBox from "../../components/WalletBox";
+import MessageBox from "../../components/MessageBox";
 
 // Dashboard's style 
 import { Container, Content } from "./styles" 
+
+// Icons/Images from src/assets folder 
+import happyEmoji from '../../assets/happy.svg';
+import sadEmoji from '../../assets/sad.svg'
 
 // Data
 import gains from '../../repositories/gains'; 
 import expenses from '../../repositories/expenses';
 import listOfMonths from '../../repositories/months';
+import uuid from "react-uuid";
 
 export default function Dashboard() {
 
@@ -149,6 +155,14 @@ export default function Dashboard() {
                     footerLabel= 'Atualizado com base nas entradas e saídas'
                     icon= 'arrowDown' 
                     boxColor= '#E44C4E'
+                />
+
+                <MessageBox 
+                    key={uuid()}
+                    title="Muito bem!"
+                    description="Sua carteira está positiva!"
+                    footerText="Continue assim. Considere investir o seu saldo."
+                    icon={happyEmoji}
                 />
 
             </Content>
