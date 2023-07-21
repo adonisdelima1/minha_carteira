@@ -7,6 +7,7 @@ export default function AppRoutes() {
     return (
         <Layout>
             <Routes>
+                <Route path='/' Component={Dashboard} />
                 <Route path='/dashboard' Component={Dashboard} />
                 <Route path='/list/:type' Component={List}  />
             </Routes>
