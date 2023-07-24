@@ -32,6 +32,7 @@ import { Container, Content } from "./styles"
 // Icons/Images from src/assets folder 
 import happyEmoji from '../../assets/happy.svg';
 import sadEmoji from '../../assets/sad.svg'
+import grinningEmoji from '../../assets/grinning.png';
 
 // Data
 import gains from '../../repositories/gains'; 
@@ -87,6 +88,81 @@ export default function Dashboard() {
     }, []); 
 
 
+    const totalOutgoes = useMemo(() => {
+        let total: number = 0;
+
+        expenses.forEach(item  => {
+            const date = new Date(item.date);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1; // jan = 0 in js
+
+            if(month === selectedMonth && year === selectedYear) {
+                try {
+                    total += Number(item.amount);
+                } catch {
+                    throw new Error(
+                        'Invalid amount! Amount must be a number.'
+                    );
+                };
+            }
+        });
+        return total;
+    }, [selectedMonth, selectedYear]);
+
+
+    const totalIncomes = useMemo(() => {
+        let total: number = 0;
+
+        gains.forEach(item  => {
+            const date = new Date(item.date);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1; // jan = 0 in js
+
+            if(month === selectedMonth && year === selectedYear) {
+                try {
+                    total += Number(item.amount);
+                } catch {
+                    throw new Error(
+                        'Invalid amount! Amount must be a number.'
+                    );
+                };
+            }
+        });
+        return total;
+    }, [selectedMonth, selectedYear]);
+
+    const totalBalance = useMemo(() => {
+        // return totalIncomes - totalOutgoes;
+        return 0;
+    }, [totalIncomes, totalOutgoes]);
+
+    const message = useMemo(() => {
+        if(totalBalance < 0) {
+            return {
+                key: uuid(),
+                title: "Que triste!",
+                description: "Neste mês, você gastou mais do que deveria.",
+                footerText: "Tente cortar gastos menos necessários.",
+                icon: sadEmoji
+            };
+        } else if(totalBalance == 0) {
+            return {
+                key: uuid(),
+                title: "Ufa!",
+                description: "Neste mês você gastou exatamente o que ganhou.",
+                footerText: "Tenha cuidado. Tente manter um saldo positivo.",
+                icon: grinningEmoji
+            };
+        } else {
+            return {
+                key: uuid(),
+                title: "Muito bem!",
+                description: "Sua carteira está positiva!",
+                footerText: "Continue assim. Considere investir o seu saldo.",
+                icon: happyEmoji
+            };
+        }
+    }, [totalBalance]);
 
     //   As funções 'handleSelectedYear' e 'handleSelectedMonth' foram 
     // sugeridas pelo instrutor do curso porque a obtenção do value de um 
@@ -101,7 +177,7 @@ export default function Dashboard() {
     //         const parsedYear = Number(year);
     //         setSelectedYear(parsedYear);
     //     } 
-    //     catch(error) {
+    //     catch{
     //         throw new Error('Invalid value for year selected.');
     //     }
     // }
@@ -111,7 +187,7 @@ export default function Dashboard() {
     //         const parsedMonth = Number(month);
     //         setSelectedMonth(parsedMonth);
     //     } 
-    //     catch(error) {
+    //     catch{
     //         throw new Error('Invalid value for month selected.');
     //     }
     // }
@@ -135,7 +211,7 @@ export default function Dashboard() {
             <Content>
                 <WalletBox 
                     title= 'Saldo'
-                    amount={150.00}
+                    amount={totalBalance}
                     footerLabel= 'Atualizado com base nas entradas e saídas'
                     icon= 'dollar' 
                     boxColor= '#4E41F0'
@@ -143,7 +219,7 @@ export default function Dashboard() {
                 
                 <WalletBox 
                     title= 'Entradas'
-                    amount={5000.00}
+                    amount={totalIncomes}
                     footerLabel= 'Atualizado com base nas entradas e saídas'
                     icon= 'arrowUp' 
                     boxColor= '#F7931B'
@@ -151,18 +227,18 @@ export default function Dashboard() {
                 
                 <WalletBox 
                     title= 'Saídas'
-                    amount={4850.00}
+                    amount={totalOutgoes}
                     footerLabel= 'Atualizado com base nas entradas e saídas'
                     icon= 'arrowDown' 
                     boxColor= '#E44C4E'
                 />
 
                 <MessageBox 
-                    key={uuid()}
-                    title="Muito bem!"
-                    description="Sua carteira está positiva!"
-                    footerText="Continue assim. Considere investir o seu saldo."
-                    icon={happyEmoji}
+                    key={message.key}
+                    title={message.title}
+                    description={message.description}
+                    footerText={message.footerText}
+                    icon={message.icon}
                 />
 
             </Content>

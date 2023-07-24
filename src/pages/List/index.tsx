@@ -148,7 +148,7 @@ export default function List() {
     //         const parsedYear = Number(year);
     //         setSelectedYear(parsedYear);
     //     } 
-    //     catch(error) {
+    //     catch{
     //         throw new Error('Invalid value for year selected.');
     //     }
     // }
@@ -158,7 +158,7 @@ export default function List() {
     //         const parsedMonth = Number(month);
     //         setSelectedMonth(parsedMonth);
     //     } 
-    //     catch(error) {
+    //     catch{
     //         throw new Error('Invalid value for month selected.');
     //     }
     // }
