@@ -19,6 +19,9 @@ import {
     Legend
 } from 'recharts';
 
+// My utils 
+import currencyFormatter from '../../utils/currencyFormatter'
+
 interface IHistoryBoxProps{
     data: {
         month: string,
@@ -53,7 +56,7 @@ export default function HistoryBox(props: IHistoryBoxProps) {
                         <CartesianGrid strokeDasharray='3 3' stroke="#cecece" />
                         <XAxis dataKey='month' stroke="#cecece" /> 
                         <YAxis />
-                        <Tooltip />
+                        <Tooltip formatter={(value) => currencyFormatter(Number(value))} />
                         {/* Abaixo está a tag de legenda para o gráfico que já vem 
                         junto com o pacote de recharts, mas o instrutor criou uma 
                         legenda manualmente||   */}
