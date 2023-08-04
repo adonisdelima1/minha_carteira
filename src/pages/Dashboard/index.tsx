@@ -25,7 +25,7 @@ import ContentHeader from "../../components/ContentHeader";
 import SelectInput from "../../components/SelectInput"; 
 import WalletBox from "../../components/WalletBox";
 import MessageBox from "../../components/MessageBox";
-import PieChartBox from "../../components/PieChart";
+import PieChartBox from "../../components/PieChartBox";
 import HistoryBox from "../../components/HistoryBox";
 
 // Dashboard's style 
@@ -35,12 +35,14 @@ import { Container, Content } from "./styles"
 import happyEmoji from '../../assets/happy.svg';
 import sadEmoji from '../../assets/sad.svg'
 import grinningEmoji from '../../assets/grinning2.png';
+import thinkingEmoji from '../../assets/thinking.png';
 
 // Data
 import gains from '../../repositories/gains'; 
 import expenses from '../../repositories/expenses';
 import listOfMonths from '../../repositories/months';
 import uuid from "react-uuid";
+import BarChartBox from "../../components/BarChartBox";
 
 export default function Dashboard() {
 
@@ -141,20 +143,21 @@ export default function Dashboard() {
     const incomesAndOutgoesRatio = useMemo(() => {
         const total = totalIncomes + totalOutgoes; 
 
-        const incomesPerCent = (totalIncomes / total) * 100;
-        const outgoesPerCent = (totalOutgoes / total) * 100;
+        // toFixed(1) restringe o número com apenas 1 casa decimal pós-vírgula
+        const incomesPerCent = Number(((totalIncomes / total) * 100).toFixed(1));
+        const outgoesPerCent = Number(((totalOutgoes / total) * 100).toFixed(1));
 
         const data = [
             {
                 name: "Entradas",
                 value: totalIncomes,
-                percent: Number(incomesPerCent.toFixed(1)), // apenas 1 casa decimal 
+                percent: incomesPerCent ? incomesPerCent : 0, 
                 color: '#F7931B'
             },
             {
                 name: "Saídas",
                 value: totalOutgoes,
-                percent: Number(outgoesPerCent.toFixed(1)), // apenas 1 casa decimal 
+                percent: outgoesPerCent ? outgoesPerCent : 0, 
                 color: '#E44C4E'
             }
         ]; 
@@ -162,7 +165,7 @@ export default function Dashboard() {
     }, [totalIncomes, totalOutgoes]);
 
     
-    const message = useMemo(() => {
+    const walletHealthMessage = useMemo(() => {
         if(totalBalance < 0) {
             return {
                 key: uuid(),
@@ -170,6 +173,14 @@ export default function Dashboard() {
                 description: "Neste mês, você gastou mais do que deveria.",
                 footerText: "Tente cortar gastos menos necessários.",
                 icon: sadEmoji
+            };
+        } else if(totalIncomes === 0 && totalOutgoes === 0) {
+            return {
+                key: uuid(),
+                title: "Ops!",
+                description: "Sem registros deste mês!",
+                footerText: "Não há registros de entradas ou saídas deste mês.",
+                icon: thinkingEmoji
             };
         } else if(totalBalance == 0) {
             return {
@@ -254,6 +265,117 @@ export default function Dashboard() {
         });
     },[selectedYear]);
 
+
+
+
+    const ExpensesRecurrentVersusEventualRatio = useMemo(() => {
+        let recurrentAmount = 0;
+        let eventualAmount = 0; 
+
+        expenses.filter((expense) => {
+            const date = new Date(expense.date);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1; 
+
+            //   Adiciona ao array resultante apenas objetos cujo teste abaixo 
+            // resultar em true 
+            return month === selectedMonth && year === selectedYear;
+        })
+        //   Agora que já temos um array composto apenas com despesas do mês e 
+        // do ano selecionados, podemos passar por cada um, checando se  
+        .forEach((filteredExpense) => {
+            if(filteredExpense.frequency === 'recorrente') {
+                return recurrentAmount += Number(filteredExpense.amount);
+            }
+
+            if(filteredExpense.frequency === 'eventual') {
+                return eventualAmount += Number(filteredExpense.amount);
+            }
+        });
+
+        const totalAmount = recurrentAmount + eventualAmount;
+
+        const recurrentPercent = 
+            Number(((recurrentAmount / totalAmount) * 100).toFixed(1));
+        const eventualPercent = 
+            Number(((eventualAmount / totalAmount) * 100).toFixed(1));
+        
+        return [
+
+            {
+                name: 'Recorrentes',
+                amount: recurrentAmount,
+                percent: recurrentPercent ? recurrentPercent : 0,
+                color: '#F7931B'
+            },
+
+            {
+                name: 'Eventuais',
+                amount: eventualAmount,
+                percent: eventualPercent ? eventualPercent : 0,
+                color: '#E44C4E'
+            }
+        ]
+
+    }, [selectedYear, selectedMonth]); 
+
+
+
+    const GainsRecurrentVersusEventualRatio = useMemo(() => {
+        let recurrentAmount = 0;
+        let eventualAmount = 0; 
+
+        gains.filter((gain) => {
+            const date = new Date(gain.date);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1; 
+
+            //   Adiciona ao array resultante apenas objetos cujo teste abaixo 
+            // resultar em true 
+            return month === selectedMonth && year === selectedYear;
+        })
+        //   Agora que já temos um array composto apenas com despesas do mês e 
+        // do ano selecionados, podemos passar por cada um, checando se  
+        .forEach((filteredGain) => {
+            if(filteredGain.frequency === 'recorrente') {
+                return recurrentAmount += Number(filteredGain.amount);
+            }
+
+            if(filteredGain.frequency === 'eventual') {
+                return eventualAmount += Number(filteredGain.amount);
+            }
+        });
+
+        const totalAmount = recurrentAmount + eventualAmount;
+
+        const recurrentPercent = 
+            Number(((recurrentAmount / totalAmount) * 100).toFixed(1));
+        const eventualPercent = 
+            Number(((eventualAmount / totalAmount) * 100).toFixed(1));
+        
+        return [
+
+            {
+                name: 'Recorrentes',
+                amount: recurrentAmount,
+                percent: recurrentPercent ? recurrentPercent : 0,
+                color: '#F7931B'
+            },
+
+            {
+                name: 'Eventuais',
+                amount: eventualAmount,
+                percent: eventualPercent ? eventualPercent : 0,
+                color: '#E44C4E'
+            }
+        ]
+
+    }, [selectedYear, selectedMonth]);
+    
+
+
+
+
     //   As funções 'handleSelectedYear' e 'handleSelectedMonth' foram 
     // sugeridas pelo instrutor do curso porque a obtenção do value de um 
     // elemento selecionado (através do 'get' usando 'e.target.value') resulta 
@@ -324,11 +446,11 @@ export default function Dashboard() {
                 />
 
                 <MessageBox 
-                    key={message.key}
-                    title={message.title}
-                    description={message.description}
-                    footerText={message.footerText}
-                    icon={message.icon}
+                    key={walletHealthMessage.key}
+                    title={walletHealthMessage.title}
+                    description={walletHealthMessage.description}
+                    footerText={walletHealthMessage.footerText}
+                    icon={walletHealthMessage.icon}
                 />
                 
                 <PieChartBox data={incomesAndOutgoesRatio}/> 
@@ -337,6 +459,16 @@ export default function Dashboard() {
                     data={historyData}
                     lineColorAmountEntry="#F7931B"
                     lineColorAmountOutput="#E44C4E"
+                />
+
+                <BarChartBox 
+                    title="Saídas"
+                    data={ExpensesRecurrentVersusEventualRatio}
+                />
+
+                <BarChartBox
+                    title="Entradas"
+                    data={GainsRecurrentVersusEventualRatio}
                 />
 
             </Content>
