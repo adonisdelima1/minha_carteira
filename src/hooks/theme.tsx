@@ -31,7 +31,7 @@ interface ITheme {
     }
 }
 
-// ThemeContext que instanciamos tipando com nossas próprias interfaces 
+//   ThemeContext que instanciamos tipando com nossas próprias interfaces 
 const ThemeContext = createContext<IThemeContext>({} as IThemeContext); 
 
 // Interface e component responsáveis por prover acesso ao tema 
@@ -39,13 +39,27 @@ interface IThemeProviderProps {
     children: React.ReactNode
 }
 export function ThemeProvider(props: IThemeProviderProps) {
-    const [theme, setTheme] = useState<ITheme>(dark);
+    const [theme, setTheme] = useState<ITheme>(() => {
+        const savedTheme = localStorage.getItem('@minha-carteira:theme');
+
+        if(savedTheme) {
+            return JSON.parse(savedTheme);
+        } else {
+            return dark;
+        }
+    });
 
     const toggleTheme = () => {
         if(theme.title === 'dark') {
             setTheme(light);
+            
+            //   Salvando informações de tema no navegador do usuário 
+            localStorage.setItem('@minha-carteira:theme', JSON.stringify(light))
         } else {
             setTheme(dark);
+
+            //   Salvando informações de tema no navegador do usuário 
+            localStorage.setItem('@minha-carteira:theme', JSON.stringify(dark))
         }
     }
 
