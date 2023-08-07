@@ -4,17 +4,25 @@ import {
     ToggleSelector
 } from './styles';
 
-export default function Toggle() {
+
+interface IToggleProps {
+    leftLabel: string,
+    rightLabel: string,
+    checked: boolean, 
+    onChange(): void
+}
+
+export default function Toggle(props: IToggleProps) {
     return(
         <Container>
-            <ToggleLabbel>Light</ToggleLabbel>
+            <ToggleLabbel>{props.leftLabel}</ToggleLabbel>
             <ToggleSelector 
-                checked
-                onChange={() => {}}
+                checked={props.checked}
+                onChange={() => {props.onChange()}}
                 uncheckedIcon = {false} 
                 checkedIcon = {false}
             />
-            <ToggleLabbel>Dark</ToggleLabbel>
+            <ToggleLabbel>{props.rightLabel}</ToggleLabbel>
         </Container>
     );
 }

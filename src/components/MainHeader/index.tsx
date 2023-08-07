@@ -1,8 +1,12 @@
 // useMemo é um hook do react que decora valores 
-import {useMemo} from 'react'
+import { useMemo, useState } from 'react'
 
 // Importando nossos emojis 
 import emojis from '../../utils/emojis';
+
+// importando nosso hook personalisado para consumir ou alterar o tema 
+import { useTheme } from '../../hooks/theme';
+
 
 import { 
     Container, 
@@ -13,6 +17,16 @@ import {
 import Toggle from '../Toggle';
 
 export default function MainHeader() {
+    const { toggleTheme, theme } = useTheme();
+
+    const [isDarkTheme, setIsDarkTheme] = useState(theme.title === 'dark' );
+    
+    const handleThemeChange = () => {
+        setIsDarkTheme(!isDarkTheme); 
+        toggleTheme();
+    }
+    
+    
     const emoji = useMemo(() => {
         //   Math.floor arredonda e o Math.random nos dá um número random 
         // menor que 1 e então multiplicamos pelo tamanho do array 
@@ -22,9 +36,15 @@ export default function MainHeader() {
         // array, ou seja, qual emoji foi sorteado 
         return emojis[indice];
     }, []);
+
     return(
         <Container>
-            <Toggle />
+            <Toggle 
+                leftLabel='Light'
+                rightLabel='Dark'
+                checked={isDarkTheme}
+                onChange={handleThemeChange}
+            />
 
             <Profile>
                 <Welcome>Olá, {emoji}</Welcome>

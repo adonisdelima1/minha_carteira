@@ -383,8 +383,12 @@ export default function Dashboard() {
     // convertemos o value para number lá mesmo na implementação do atributo 
     // onClick(). A intenção foi mantê-las apenas para preservar exemplos de 
     // uso do try-catch. 
+
+    //   O use callback é um hook do react que guarda (memoizes) uma função para 
+    // que ela não seja carregada a cada renderização, aumentando a eficiência 
+    // do uso de memória. É basicamente um useMemo para funções.
     
-    // const handleSelectedYear = (year: string) => {
+    // const handleSelectedYear = useCallback((year: string) => {
     //     try {
     //         const parsedYear = Number(year);
     //         setSelectedYear(parsedYear);
@@ -392,9 +396,9 @@ export default function Dashboard() {
     //     catch{
     //         throw new Error('Invalid value for year selected.');
     //     }
-    // }
+    // }, []);
     
-    // const handleSelectedMonth = (month: string) => {
+    // const handleSelectedMonth = useCallback((month: string) => {
     //     try {
     //         const parsedMonth = Number(month);
     //         setSelectedMonth(parsedMonth);
@@ -402,7 +406,7 @@ export default function Dashboard() {
     //     catch{
     //         throw new Error('Invalid value for month selected.');
     //     }
-    // }
+    // }, []);
 
 
     
