@@ -8,6 +8,7 @@ import {
 } from "./styles"; 
 
 import logoImg from '../../assets/logo.svg';
+import Button from "../../components/Button";
 
 export default function SignIn() {
     return (
@@ -32,7 +33,7 @@ export default function SignIn() {
                     required
                 />
 
-                <button type="submit">Acessar</button>
+                <Button type="submit">Acessar</Button>
             </Form>
         </Container>
     );
