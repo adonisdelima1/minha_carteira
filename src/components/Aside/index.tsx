@@ -5,19 +5,25 @@ import {
     MdExitToApp
 } from 'react-icons/md'
 
+import logoImg from '../../assets/logo.svg';
+
+import { useAuthContext } from '../../hooks/auth';
+
 import {
     Container, 
     Header, 
     LogoImg,
     Title,
     MenuContainer,
-    MenuItemLink
+    MenuItemLink,
+    MenuItemButton
 } from  './styles'; 
 
-import logoImg from '../../assets/logo.svg';
 
 
 export default function Aside(){
+    const { signOut } = useAuthContext();
+    
     return(
         <Container>
             <Header>
@@ -26,7 +32,7 @@ export default function Aside(){
             </Header>
 
             <MenuContainer>
-                <MenuItemLink href='/dashboard'>
+                <MenuItemLink href='/'>
                     <MdDashboard />
                     Dashboard
                 </MenuItemLink> 
@@ -38,10 +44,10 @@ export default function Aside(){
                     <MdArrowDownward />
                     Saídas
                 </MenuItemLink> 
-                <MenuItemLink href=''>
+                <MenuItemButton onClick={signOut}>
                     <MdExitToApp />
                     Sair
-                </MenuItemLink> 
+                </MenuItemButton> 
             </MenuContainer>
         </Container>
     );

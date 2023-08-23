@@ -71,3 +71,34 @@ export const MenuItemLink = styled.a`
         margin-right: 5px;
     }
 `;
+
+export const MenuItemButton = styled.button`
+    font-size: 17px;
+    color: ${props => props.theme.colors.info}; 
+    
+    border: none;
+    background: none;
+
+    // Margem de 7px em cima e embaixo e 0 nos lados 
+    margin: 7px 0; 
+
+    //Organizando o ícone e o texto do botão/link 
+    display: flex;
+    align-items: center;
+
+    // Configurando a animação ao passar o mouse em cima: 
+    
+    // Velocidade da transição
+    transition: opacity .4s;
+    
+    // Definindo quais propriedades mudarão quando hover for acionado
+    &:hover {
+        opacity: .7;
+    }
+
+    // Garantindo que estamos mexendo apenas nos svg dos react-icons 
+    > svg {
+        font-size: 18px;
+        margin-right: 5px;
+    }
+`;

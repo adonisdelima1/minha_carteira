@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Input from "../../components/Input";
 
 import { 
@@ -9,15 +11,21 @@ import {
 
 import logoImg from '../../assets/logo.svg';
 import Button from "../../components/Button";
+import { useAuthContext } from "../../hooks/auth";
 
 export default function SignIn() {
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>(''); 
+
+    const { signIn } = useAuthContext();
+    
     return (
         <Container>
             <Logo>
                 <img src={logoImg} alt="Minha CarteiraS" />
                 <h2>Minha Carteira</h2>
             </Logo>
-            <Form onSubmit={() => {}}>
+            <Form onSubmit={() => signIn(email, password)}>
                 <FormTitle>
                     <h3>Entrar</h3>
                 </FormTitle>
@@ -26,11 +34,13 @@ export default function SignIn() {
                     type="email"
                     placeholder="e-mail"
                     required
+                    onChange={(e) => setEmail(e.target.value)}
                 />
                 <Input 
                     type="password"
                     placeholder="senha"
                     required
+                    onChange={(e) => setPassword(e.target.value)}
                 />
 
                 <Button type="submit">Acessar</Button>
