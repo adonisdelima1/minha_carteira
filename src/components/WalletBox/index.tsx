@@ -32,9 +32,9 @@ export default function WalletBox(props: IWalletBox) {
         <Container color={props.boxColor}>
             <span>{props.title}</span>
             <h1>
+                <strong>R$ </strong>
                 <CountUp 
                     end={props.amount}
-                    prefix='R$'
                     separator='.' // Usando ponto para separar grandezas (1.000)
                     decimal=',' // Usando vírgula para separar as casa decimais 
                     decimals={2} // Definindo número de casas decimais 

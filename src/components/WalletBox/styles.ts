@@ -8,7 +8,7 @@ export const Container = styled.div<IContainerProps>`
     height: 150px;
 
     // 10px em cima e embaixo e 0 (zero) dos lados 
-    margin: 10pz 0;
+    margin: 10px 0;
 
     background-color: ${props => props.color};
 
@@ -54,5 +54,47 @@ export const Container = styled.div<IContainerProps>`
         position: absolute;
         bottom: 10px;
     }
+
+    //   Essas configurações de estilo são acionadas nos dispositivos que acessarem o 
+    // nosso app e possuem um display com largura de 770 pixels ou menor.
+    @media(max-width: 770px){
+        > span {
+            font-size: 14px;
+        }
+
+        > h1 {
+            word-wrap: break-word;
+            font-size: 22px;
+
+            > strong {
+                display: inline-block;
+                width: 100%;
+                font-size: 16px;
+            }
+        }
+    }
+
+    //   Essas configurações de estilo são acionadas nos dispositivos que acessarem o 
+    // nosso app e possuem um display com largura de 420 pixels ou menor.
+    @media(max-width: 420px){
+        width: 100%;
+
+        > h1 {
+            display: flex;
+            
+            strong {
+                position: initial;
+                width: auto;
+                font-size: 22px;            
+            }
+            
+            strong:after {
+                display: inline-block;
+                content: '';
+                width: 1px;
+            }
+        }
+    }
+
 `;
  
