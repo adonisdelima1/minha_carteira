@@ -37,13 +37,17 @@ export const Header = styled.header`
         margin-bottom: 20px;
         padding-left: 38px;
     }
+
+    @media(max-width: 1280px){
+        flex-direction: column;
+    }
 `; 
 
 export const LegendContainer = styled.ul`
     list-style: none;
     
     display: flex;
-    padding-right: 23px;
+    padding-right: 23px;  
 `;
 
 export const CustomLegend = styled.li<ICustomLegendProps>`
@@ -68,5 +72,14 @@ export const CustomLegend = styled.li<ICustomLegendProps>`
 
     > span {
         margin-left: 3px;
+    }
+
+    @media(max-width: 1280px){
+        /* > div {
+            width: 30px;
+            height: 30px;
+        } */
+
+        margin-left: 38px;
     }
 `;
