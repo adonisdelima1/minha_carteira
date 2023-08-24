@@ -11,8 +11,8 @@ import {
 import { 
     Container,
     LeftSide,
-    SubtitleContainer, 
-    Subtitle,
+    LegendContainer, 
+    Legend,
     RightSide,
 
 
@@ -32,16 +32,16 @@ export default function PieChartBox(props: IPieChartBoxProps) {
         <Container>
             <LeftSide>
                 <h2>Relação</h2>
-                <SubtitleContainer>
+                <LegendContainer>
                     {
                         props.data.map((item) => (
-                            <Subtitle color={item.color}>
+                            <Legend color={item.color}>
                                 <div>{item.percent}%</div>
                                 <span>{item.name}</span>
-                            </Subtitle>
+                            </Legend>
                         ))
                     }
-                </SubtitleContainer>
+                </LegendContainer>
             </LeftSide>
             <RightSide>
                 <ResponsiveContainer>

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 
-interface ISubtitleProps {
+interface ILegendProps {
     color: string
 }
 
@@ -16,7 +16,12 @@ export const Container = styled.div`
 
     border-radius: 7px; 
 
-    display: flex;
+    display: flex; 
+
+    @media(max-width: 770px) {
+        display: flex;
+        width: 100%;
+    }
 `;
 
 export const LeftSide = styled.aside`
@@ -25,9 +30,24 @@ export const LeftSide = styled.aside`
     > h2, h3 {
         margin-bottom: 20px;
     }
+
+    @media(max-width: 1345px) {
+        padding: 0 15px 0; // 0 em cima, 15px embaixo e 5px nos lados 
+        margin-bottom: 7px;
+
+        > h2 {
+            margin-top: 15px;
+            margin-bottom: 7px;
+        }
+    }
+
+    @media (max-width: 420) {
+        padding: 15px;
+        margin-bottom: 7px;
+    }
 `;
 
-export const SubtitleContainer = styled.ul`
+export const LegendContainer = styled.ul`
     list-style: none;
 
     height: 170px;
@@ -48,9 +68,14 @@ export const SubtitleContainer = styled.ul`
     &::-webkit-scrollbar-track {
         background-color: ${props => props.theme.colors.tertiary};
     } 
+
+    @media(max-width: 1345px) {
+        display: flex;
+        flex-direction: column;
+    }
 `;
 
-export const Subtitle = styled.li<ISubtitleProps>`
+export const Legend = styled.li<ILegendProps>`
     display: flex;
     align-items: center;
 
@@ -72,10 +97,30 @@ export const Subtitle = styled.li<ISubtitleProps>`
     > span {
         margin-left: 5px;
     }
+
+    @media(max-width: 1345px) {
+        font-size: 15px;
+        margin: 3px 0; 
+
+        > div {
+            height: 35px;
+            width: 48px; 
+            line-height: 35px;
+            margin-right: 7px;
+        }
+
+        > span {
+            margin-left: 7px;
+        }
+    }
 `;
 
 export const RightSide = styled.main`
     display: flex;
     flex: 1; // Ocupa toda largura e altura que estiver disponível 
     justify-content: center;
+
+    @media(max-width: 1345px) {
+        height: 100%;
+    }
 `; 
