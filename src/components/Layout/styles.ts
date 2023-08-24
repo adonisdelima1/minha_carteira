@@ -21,4 +21,23 @@ export const Container = styled.div`
 
     // Definindo que o container deve preencher 100% da altura do display (vh)
     height: 100vh; 
+
+
+
+
+    //   Usando media-queries para ativar o estilo responsivo mais adequado para 
+    // quando o display do dispositivo que estiver rodando  o nosso App tiver 
+    // largura  igual ou menor que 600 pixels.
+    @media(max-width: 600px){
+        
+        grid-template-columns: 100%;
+        grid-template-rows: 70px auto; 
+
+        //    Se o dispositivo que acessar o nosso web tiver largura igual ou 
+        // menor que 600 pixels então configuraremos as grid-template-areas 
+        // removendo a coluna do menu aside.
+        grid-template-areas: 
+        'MH' 
+        'CT';
+    }
 `;
