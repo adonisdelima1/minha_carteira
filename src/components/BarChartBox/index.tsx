@@ -13,8 +13,8 @@ import {
     Container,
     LeftSide, 
     RightSide,
-    SubtitleContainer,
-    Subtitle
+    LegendContainer,
+    Legend
 } from "./styles"; 
 import currencyFormatter from '../../utils/currencyFormatter';
 
@@ -35,16 +35,16 @@ export default function BarChartBox(props: IBarChartBoxProps) {
         <Container>
             <LeftSide>
                 <h2>{props.title}</h2>
-                <SubtitleContainer>
+                <LegendContainer>
                     {
                         props.data.map((item) => (
-                            <Subtitle color={item.color}>
+                            <Legend color={item.color}>
                                 <div>{item.percent}%</div>
                                 <span>{item.name}</span>
-                            </Subtitle>
+                            </Legend>
                         ))
                     }
-                </SubtitleContainer>
+                </LegendContainer>
             </LeftSide> 
             <RightSide>
                 <ResponsiveContainer>

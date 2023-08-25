@@ -1,6 +1,6 @@
 import styled from 'styled-components'; 
 
-interface ISubtitleProps {
+interface ILegendProps {
     color: string
 }
 
@@ -16,6 +16,14 @@ export const Container = styled.div`
     border-radius: 7px; 
 
     display: flex;
+
+    @media(max-width: 1200px) {
+        display: flex;
+        flex-direction: column;
+
+        width: 100%; 
+        height: auto;
+    }
 `;
 
 export const LeftSide = styled.div`
@@ -37,9 +45,13 @@ export const RightSide = styled.div`
     justify-content: center;
 
     padding: 30px 25px;
+
+    @media(max-width: 1200px) {
+        width: 100%; 
+    }
 `;
 
-export const SubtitleContainer = styled.ul`
+export const LegendContainer = styled.ul`
     list-style: none;
 
     height: 170px;
@@ -60,9 +72,14 @@ export const SubtitleContainer = styled.ul`
     &::-webkit-scrollbar-track {
         background-color: ${props => props.theme.colors.tertiary};
     } 
+
+    @media(max-width: 1200px) {
+        display: flex;
+        height: auto;
+    }
 `;
 
-export const Subtitle = styled.li<ISubtitleProps>`
+export const Legend = styled.li<ILegendProps>`
     display: flex;
     align-items: center;
 
@@ -83,6 +100,18 @@ export const Subtitle = styled.li<ISubtitleProps>`
 
     > span {
         margin-left: 5px;
+    }
+
+    @media(max-width: 1200px) {
+        > div {
+            width: 53px;
+            height: 35px;
+
+            font-size: 16px;
+            line-height: 35px; 
+        }
+
+        margin-right: 10px;
     }
 `;
 
