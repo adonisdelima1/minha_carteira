@@ -4,16 +4,18 @@ import { useMemo, useState } from 'react'
 // Importando nossos emojis 
 import emojis from '../../utils/emojis';
 
-// importando nosso hook personalisado para consumir ou alterar o tema 
+// Importando nosso hook personalisado para consumir ou alterar o tema 
 import { useTheme } from '../../hooks/theme';
 
-
+// Styled components do MainHeader 
 import { 
     Container, 
     Profile, 
     Welcome, 
-    UserName 
+    UserName
 } from './styles'; 
+
+// Meus components 
 import Toggle from '../Toggle';
 
 export default function MainHeader() {

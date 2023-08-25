@@ -10,6 +10,10 @@ export const Container = styled.div`
     display: flex; 
     justify-content: space-between;
     margin-bottom: 25px;
+
+    @media(max-width: 320px) {
+        flex-direction: column;
+    }
 `; 
 
 //   Para que possamos usar as props temos que tipar o styled component com 
@@ -39,8 +43,34 @@ export const TitleContainer = styled.div <ITitleContainerProps>`
             border-bottom: 10px solid ${ props => props.lineColor };
         }
     }
+
+    @media(max-width: 400px) {
+        > h1 {
+            font-size: 23px;
+
+            
+            &::after {
+            
+                content: '';
+
+                //   Quando especificamos o 'display' como 'block' podemos 
+                // trabalhar com largura e altura 
+                display: block;
+                width: 55px;
+                border-bottom: 7px solid ${ props => props.lineColor };
+            }
+        }        
+    }
 `;
 
 export const DateFilters = styled.div`
     display: flex;
+
+    @media(max-width: 350px) {
+        width: 100%;
+
+        justify-content: space-around; 
+
+        margin-top: 20px;
+    }
 `;

@@ -21,7 +21,7 @@ export const Container = styled.div`
 
     // Definindo que o container deve preencher 100% da altura do display (vh)
     height: 100vh; 
-
+    min-width: 315px;
 
 
 
