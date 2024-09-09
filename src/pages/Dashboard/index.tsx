@@ -50,8 +50,14 @@ export default function Dashboard() {
     // Acrescentamos 1 ao mês obtido porque janeiro tem id = 0
     const [selectedMonth, setSelectedMonth] = 
         useState<number>(new Date().getMonth() + 1);
+    
+    // This line is commented because the current year is not 2023 anymore 
+    // const [selectedYear, setSelectedYear] = 
+    //     useState<number>(new Date().getFullYear());
+    
+    // Setting 2023 hardcoded because the hardcoded records are from 2023
     const [selectedYear, setSelectedYear] = 
-        useState<number>(new Date().getFullYear());
+    useState<number>(2023);
 
         
     
